@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/sheyerdahl/smart-brain/static/css/main.17ff7b2d.css",
+    "main.js": "/sheyerdahl/smart-brain/static/js/main.b56df786.js",
+    "static/js/787.50f02260.chunk.js": "/sheyerdahl/smart-brain/static/js/787.50f02260.chunk.js",
+    "index.html": "/sheyerdahl/smart-brain/index.html",
+    "main.17ff7b2d.css.map": "/sheyerdahl/smart-brain/static/css/main.17ff7b2d.css.map",
+    "main.b56df786.js.map": "/sheyerdahl/smart-brain/static/js/main.b56df786.js.map",
+    "787.50f02260.chunk.js.map": "/sheyerdahl/smart-brain/static/js/787.50f02260.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.17ff7b2d.css",
+    "static/js/main.b56df786.js"
+  ]
+}
