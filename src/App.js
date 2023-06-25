@@ -1,5 +1,3 @@
-console.log("App.js started!")
-
 import React from 'react';
 import './App.css';
 import Navigation from "./components/Navigation/Navigation"
@@ -10,6 +8,8 @@ import ImageRecognition from "./components/ImageRecognition/ImageRecognition"
 import Signin from "./components/Signin/Signin"
 import Register from "./components/Register/Register"
 import ParticlesBg from 'particles-bg'
+
+console.log("App.js started!")
 
 const initialState = {
   input: "",
