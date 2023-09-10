@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Navigation from "./components/Navigation/Navigation"
 import Logo from "./components/Logo/Logo"
@@ -25,34 +25,47 @@ const initialState = {
     joined: "",
   }
 }
-class App extends React.Component {
-  constructor() {
-    super()
-    this.state = initialState
+
+function App() {
+  const [input, setInput] = useState(initialState.input);
+  const [imageUrl, setImageUrl] = useState(initialState.imageUrl);
+  const [imageCaptions, setImageCaptions] = useState(initialState.imageCaptions);
+  const [route, setRoute] = useState(initialState.route);
+  const [isSignedIn, setIsSignedIn] = useState(initialState.isSignedIn);
+  const [user, setUser] = useState(initialState.user);
+
+
+  const resetState = () => {
+    setInput(initialState.input);
+    setImageUrl(initialState.imageUrl);
+    setImageCaptions(initialState.imageCaptions);
+    setRoute(initialState.route);
+    setIsSignedIn(initialState.isSignedIn);
+    setUser(initialState.user);
   }
 
-  loadUser = (data) => {
-    this.setState({user: {
-        id: data.id,
-        name: data.name,
-        email: data.email,
-        entries: data.entries,
-        joined: data.joined,
-    }})
+  const loadUser = (data) => {
+    setUser({
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined,
+    })
   }
 
-  onInputChange = (event) => {
-    this.setState({input: event.target.value})
+  const onInputChange = (event) => {
+    setInput(event.target.value)
   }
 
-  onButtonSubmit = () => {
-    this.setState({imageUrl: this.state.input})
+  const onButtonSubmit = () => {
+    setImageUrl(input)
 
     fetch("http://localhost:3000/imageurl", {
       method: "post",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-         input: this.state.input
+         input: input
       })
     })
     .then(response => response.json())
@@ -62,51 +75,49 @@ class App extends React.Component {
           method: "put",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({
-              id: this.state.user.id
+              id: user.id
           })
         })
         .then(response => response.json())
         .then(count => {
-          this.setState(Object.assign(this.state.user, {entries: count}))
+          setUser({...user, entries: count})
         })
         .catch(console.log)
       }
-      this.setState({imageCaptions: result.outputs[0].data.text.raw})
+      setImageCaptions(result.outputs[0].data.text.raw)
     })
     .catch(error => console.log('error', error));
   }
 
-  onRouteChange = (route) => {
+  const onRouteChange = (route) => {
     if (route === "signin") {
-      this.setState(initialState)
+      resetState()
     } else if (route === "home") {
-      this.setState({isSignedIn: true})
+      setIsSignedIn(true)
     }
-    this.setState({route: route})
+    setRoute(route)
   }
 
-  render() {
-    const {isSignedIn, imageUrl, route, imageCaptions} = this.state;
-    return (
+  
+  return (
       <div className="App">
         <ParticlesBg type="cobweb" bg={true} color="#4444ff" />
-        <Navigation onRouteChange={this.onRouteChange} isSignedIn={isSignedIn}/>
+        <Navigation onRouteChange={onRouteChange} isSignedIn={isSignedIn}/>
         { route === "home" 
         ? <div> 
         <Logo />
-        <Rank name = {this.state.user.name} entries={this.state.user.entries} /> 
-        <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>       
+        <Rank name = {user.name} entries={user.entries} /> 
+        <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onButtonSubmit}/>       
         <ImageRecognition imageUrl={imageUrl} imageCaptions={imageCaptions}/>
         </div>
         : (
           route === "signin"
-          ? <Signin onRouteChange={this.onRouteChange} loadUser={this.loadUser} />
-          : <Register onRouteChange={this.onRouteChange} loadUser={this.loadUser} />
+          ? <Signin onRouteChange={onRouteChange} loadUser={loadUser} />
+          : <Register onRouteChange={onRouteChange} loadUser={loadUser} />
           )
         }
       </div>
-    )
-  };
+  );
 }
 
 export default App;
